@@ -11,8 +11,10 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
+with app.app_context():
+    os.makedirs('downloads', exist_ok=True)
+    os.makedirs('markdown', exist_ok=True)
 
-# Crea el archivo database.db automáticamente al iniciar si no existe
 with app.app_context():
     db.create_all()
 
@@ -21,14 +23,12 @@ def home():
     """Página inicial (Home) con las estadísticas clave para Hiram."""
     total_docs = Documento.query.count()
     
-    # Calcular total de palabras sumando el texto de cada documento
     todos_los_docs = Documento.query.all()
     total_palabras = 0
     for doc in todos_los_docs:
         if doc.contenido_texto:
             total_palabras += len(doc.contenido_texto.split())
             
-    # Agrupar y contar cuántos documentos hay por año
     conteo_por_anio = {}
     for doc in todos_los_docs:
         conteo_por_anio[doc.anio] = conteo_por_anio.get(doc.anio, 0) + 1
