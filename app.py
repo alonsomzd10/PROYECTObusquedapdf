@@ -96,5 +96,26 @@ def search():
                            resultados=resultados_encontrados, 
                            umbral_actual=umbral_slider)
 
+def registrar_documento_scrappeado(nombre, url_pdf, ruta_pdf, ruta_md, texto, anio, fuente_url):
+    """Función de utilidad para que el scrapper registre PDFs en la BD."""
+    fuente = FuenteWeb.query.filter_by(url=fuente_url).first()
+    if not fuente:
+        fuente = FuenteWeb(url=fuente_url, status="Escrapeada")
+        db.session.add(fuente)
+
+    fuente.status = "Escrapeada"
+
+    nuevo_doc = Documento(
+        nombre_archivo=nombre,
+        url_original_pdf=url_pdf,
+        ruta_local_pdf=ruta_pdf,
+        ruta_local_markdown=ruta_md,
+        contenido_texto=texto,
+        anio=anio,
+        fuente=fuente
+    )
+    db.session.add(nuevo_doc)
+    db.session.commit()
+
 if __name__ == '__main__':
     app.run(debug=True)
