@@ -117,5 +117,40 @@ def registrar_documento_scrappeado(nombre, url_pdf, ruta_pdf, ruta_md, texto, an
     db.session.add(nuevo_doc)
     db.session.commit()
 
+@app.route('/seed-demo')
+def seed_demo():
+    """Ruta temporal para rellenar la base de datos con datos de prueba."""
+    # Limpiar datos anteriores para pruebas limpias
+    Documento.query.delete()
+    FuenteWeb.query.delete()
+    
+    fuente = FuenteWeb(url="https://fi-ing.unison.mx/acuerdos-2026", status="Escrapeada")
+    db.session.add(fuente)
+    db.session.commit()
+    
+    doc1 = Documento(
+        nombre_archivo="acuerdo_enero_2026.pdf",
+        url_original_pdf="https://fi-ing.unison.mx/acuerdos-2026/enero.pdf",
+        ruta_local_pdf="downloads/enero.pdf",
+        ruta_local_markdown="markdown/enero.md",
+        contenido_texto="En la Universidad de Sonora se acordó el presupuesto de ingeniería para el año dos mil veintiséis.",
+        anio=2026,
+        fuente_id=fuente.id
+    )
+    
+    doc2 = Documento(
+        nombre_archivo="minuta_octubre_2025.pdf",
+        url_original_pdf="https://fi-ing.unison.mx/acuerdos-2025/octubre.pdf",
+        ruta_local_pdf="downloads/octubre.pdf",
+        ruta_local_markdown="markdown/octubre.md",
+        contenido_texto="Reunión del consejo divisional sobre planes de estudio académicos del año dos mil veinticinco.",
+        anio=2025,
+        fuente_id=fuente.id
+    )
+    
+    db.session.add_all([doc1, doc2])
+    db.session.commit()
+    return "¡Base de datos poblada con éxito! Ve al Home o a /search para probar."
+
 if __name__ == '__main__':
     app.run(debug=True)
