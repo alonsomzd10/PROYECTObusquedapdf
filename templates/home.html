@@ -21,3 +21,23 @@
             </div>
         </div>
     </div>
+    <div class="col-md-4 mb-3">
+        <div class="card border-0 shadow-sm bg-success text-white h-100">
+            <div class="card-body py-4">
+                <i class="bi bi-translate display-4"></i>
+                <h3 class="card-title mt-2">Palabras Clave</h3>
+                <p class="display-5 fw-bold mb-0">{{ total_words }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="card border-0 shadow-sm bg-dark text-white h-100">
+            <div class="card-body py-4">
+                <i class="bi bi-link-45deg display-4"></i>
+                <h3 class="card-title mt-2">URLs Registradas</h3>
+                <p class="display-5 fw-bold mb-0">{{ total_urls }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
