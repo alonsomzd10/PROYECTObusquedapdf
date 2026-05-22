@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12 mb-4">
+        <div class="card shadow-sm border-0">
+            <div class="card-body bg-white p-4 text-center">
+                <h2 class="fw-bold mb-3">Ejecución del Extractor Automático</h2>
+                <p class="text-muted">El sistema recorrerá las URLs guardadas para descargar e indexar los archivos PDF.</p>
+                
+                <form action="/scrapper" method="POST" class="d-inline">
+                    <div class="form-check form-switch d-inline-block text-start mb-3 me-4">
+                        <input class="form-check-input" type="checkbox" role="switch" id="use_ocr" name="use_ocr" value="true">
+                        <label class="form-check-label fw-semibold" for="use_ocr">Forzar procesamiento OCR</label>
+                    </div>
+                    <br>
+                    <button type="submit" class="btn btn-danger btn-lg px-5 shadow-sm"><i class="bi bi-play-fill me-2"></i>Iniciar Indexación</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-dark text-white fw-bold">
+                <i class="bi bi-filetype-pdf me-2"></i>Documentos Descargados e Indexados
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-striped align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Nombre del Archivo</th>
+                                <th>Origen URL</th>
+                                <th>Tamaño de Texto</th>
+                                <th class="text-center">Método</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if documents %}
+                                {% for doc in documents %}
+                                <tr>
+                                    <td class="fw-semibold text-primary">{{ doc.filename }}</td>
+                                    <td class="text-muted text-truncate" style="max-width: 200px;">{{ doc.source_url }}</td>
+                                    <td>{{ doc.text_length }} caracteres</td>
+                                    <td class="text-center">
+                                        <span class="badge {{ 'bg-purple text-white' if doc.was_ocr else 'bg-info text-dark' }}">
+                                            {{ 'OCR Image' if doc.was_ocr else 'Native PDF' }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td colspan="4" class="text-center text-muted py-4">No se han procesado documentos todavía.</td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
