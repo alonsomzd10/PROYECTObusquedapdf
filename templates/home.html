@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="p-5 bg-white border rounded-3 shadow-sm">
+            <h1 class="display-5 fw-bold text-dark">Motor de Búsqueda de PDFs</h1>
+            <p class="col-md-8 fs-5 text-muted">Gestión de URLs semilla, rastreador web automático, procesamiento con OCR y algoritmos de similitud Levenshtein.</p>
+            <a href="/search" class="btn btn-primary btn-lg"><i class="bi bi-search me-2"></i>Ir al buscador</a>
+        </div>
+    </div>
+</div>
+
+<div class="row text-center">
+    <div class="col-md-4 mb-3">
+        <div class="card border-0 shadow-sm bg-primary text-white h-100">
+            <div class="card-body py-4">
+                <i class="bi bi-file-earmark-text display-4"></i>
+                <h3 class="card-title mt-2">Documentos</h3>
+                <p class="display-5 fw-bold mb-0">{{ total_docs }}</p>
+            </div>
+        </div>
+    </div>
