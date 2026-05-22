@@ -22,3 +22,46 @@
             </div>
         </div>
     </div>
+    <div class="col-md-7">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-secondary text-white fw-bold">
+                <i class="bi bi-list-ul me-2"></i>URLs en el Sistema
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>URL Semilla</th>
+                                <th>Descripción</th>
+                                <th class="text-center">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if urls %}
+                                {% for url in urls %}
+                                <tr>
+                                    <td class="text-truncate" style="max-width: 250px;">
+                                        <a href="{{ url.address }}" target="_blank">{{ url.address }}</a>
+                                    </td>
+                                    <td>{{ url.description or 'Sin descripción' }}</td>
+                                    <td class="text-center">
+                                        <a href="/config/delete/{{ url.id }}" class="btn btn-outline-danger btn-sm" onclick="return confirm('¿Eliminar esta URL?');">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td colspan="3" class="text-center text-muted py-4">No hay URLs registradas todavía.</td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
