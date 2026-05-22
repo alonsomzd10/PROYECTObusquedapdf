@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-5 mb-4">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-dark text-white fw-bold">
+                <i class="bi bi-plus-circle me-2"></i>Registrar Nueva URL Semilla
+            </div>
+            <div class="card-body">
+                <form action="/config" method="POST">
+                    <div class="mb-3">
+                        <label for="url" class="form-label">Dirección Web (http/https)</label>
+                        <input type="url" class="form-control" id="url" name="url" placeholder="https://ejemplo.com/pdfs" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="descripcion" class="form-label">Descripción</label>
+                        <input type="text" class="form-control" id="descripcion" name="descripcion" placeholder="Portal de Transparencia">
+                    </div>
+                    <button type="submit" class="btn btn-success w-100">Guardar URL</button>
+                </form>
+            </div>
+        </div>
+    </div>
