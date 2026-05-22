@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12 mb-4">
+        <div class="card shadow-sm border-0 bg-white">
+            <div class="card-body p-4">
+                <h2 class="fw-bold text-center mb-4"><i class="bi bi-search text-primary me-2"></i>Buscador por Similitud</h2>
+                
+                <form action="/search" method="GET">
+                    <div class="row g-3 align-items-end">
+                        <div class="col-md-8">
+                            <label for="q" class="form-label fw-semibold">Término de búsqueda</label>
+                            <input type="text" class="form-control form-control-lg" id="q" name="q" value="{{ query_text or '' }}" placeholder="¿Qué estás buscando?" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="tolerance" class="form-label fw-semibold">Tolerancia Levenshtein: <span id="toleranceValue" class="text-primary fw-bold">{{ tolerance or 70 }}</span>%</label>
+                            <input type="range" class="form-range" id="tolerance" name="tolerance" min="10" max="100" step="5" value="{{ tolerance or 70 }}" oninput="document.getElementById('toleranceValue').innerText = this.value">
+                        </div>
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary btn-lg w-100 shadow-sm">Buscar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
