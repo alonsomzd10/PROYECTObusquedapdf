@@ -41,8 +41,8 @@ def scrapper():
     fuentes = FuenteWeb.query.all()
     return render_template('scrapper.html', fuentes=fuentes)
 
-@app.route('/configuration', methods=['GET', 'POST'])
-def configuration():
+@app.route('/config', methods=['GET', 'POST'])
+def config():
     """Permite añadir nuevas URLs a la lista de escrapeo."""
     if request.method == 'POST':
         url_ingresada = request.form.get('url_fuente', '').strip()
@@ -152,5 +152,7 @@ def seed_demo():
     db.session.commit()
     return "¡Base de datos poblada con éxito! Ve al Home o a /search para probar."
 
+
+    
 if __name__ == '__main__':
     app.run(debug=True)
