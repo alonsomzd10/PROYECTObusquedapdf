@@ -2,6 +2,8 @@ import os
 from flask import Flask, render_template, request, redirect, url_for, flash
 from models import db, FuenteWeb, Documento
 import Levenshtein
+from scraper import escanear_pagina_web, extraer_texto_pdf_u_ocr
+from search_engine import ejecutar_busqueda_difusa
 
 app = Flask(__name__)
 app.secret_key = 'clave_secreta_para_desarrollo'  # Requerido para usar alertas flash
@@ -37,9 +39,40 @@ def home():
 
 @app.route('/scrapper', methods=['GET', 'POST'])
 def scrapper():
-    """Muestra a Alan la lista de direcciones web configuradas y sus archivos."""
+    """Ejecuta el scrapper cuando Hiram presiona el botón, o solo muestra la página."""
+    if request.method == 'POST':
+        # 1. Traer todas las URLs que guardaste en Configuración
+        fuentes = FuenteWeb.query.all()
+        
+        # 2. Recorrer cada URL y echar a andar el robot
+        for fuente in fuentes:
+            # Encuentra los links de los PDFs
+            links_pdfs = escanear_pagina_web(fuente.url)
+            
+            for link in links_pdfs:
+                # Extrae el texto de cada PDF
+                texto = extraer_texto_pdf_u_ocr(link)
+                
+                # Guarda el documento en la base de datos usando la función que ya tenían
+                # (Asumiendo que registrar_documento_scrappeado ya está en app.py)
+                registrar_documento_scrappeado(
+                    nombre=link.split('/')[-1], 
+                    url_pdf=link, 
+                    ruta_pdf="downloads/" + link.split('/')[-1], 
+                    ruta_md="", 
+                    texto=texto, 
+                    anio=2026, 
+                    fuente_url=fuente.url
+                )
+                
+        flash("¡El Scrapper terminó de descargar y procesar todos los PDFs!", "success")
+        return redirect(url_for('scrapper'))
+
+    # Si es GET (solo entrar a la página), muestra la tabla
     fuentes = FuenteWeb.query.all()
-    return render_template('scrapper.html', fuentes=fuentes)
+    # Aquí buscamos los documentos procesados para mandarlos a tu tabla del HTML
+    documentos = Documento.query.all() 
+    return render_template('scrapper.html', fuentes=fuentes, documents=documentos)
 
 @app.route('/config', methods=['GET', 'POST'])
 def config():
