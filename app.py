@@ -35,7 +35,7 @@ def home():
         
     return render_template('home.html', total_docs=total_docs, total_palabras=total_palabras, conteo_por_anio=conteo_por_anio)
 
-@app.route('/scrapper')
+@app.route('/scrapper', methods=['GET', 'POST'])
 def scrapper():
     """Muestra a Alan la lista de direcciones web configuradas y sus archivos."""
     fuentes = FuenteWeb.query.all()
@@ -53,7 +53,7 @@ def config():
                 nueva_fuente = FuenteWeb(url=url_ingresada)
                 db.session.add(nueva_fuente)
                 db.session.commit()
-            return redirect(url_for('configuration'))
+            return redirect(url_for('config'))
             
     fuentes = FuenteWeb.query.all()
     return render_template('config.html', fuentes=fuentes)
