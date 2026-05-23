@@ -11,11 +11,11 @@
                     <div class="row g-3 align-items-end">
                         <div class="col-md-8">
                             <label for="q" class="form-label fw-semibold">Término de búsqueda</label>
-                            <input type="text" class="form-control form-control-lg" id="q" name="q" value="{{ query_text or '' }}" placeholder="¿Qué estás buscando?" required>
+                            <input type="text" class="form-control form-control-lg" id="q" name="q" value="{{ texto_buscado or '' }}" placeholder="¿Qué estás buscando?" required>
                         </div>
                         <div class="col-md-4">
-                            <label for="tolerance" class="form-label fw-semibold">Tolerancia Levenshtein: <span id="toleranceValue" class="text-primary fw-bold">{{ tolerance or 70 }}</span>%</label>
-                            <input type="range" class="form-range" id="tolerance" name="tolerance" min="10" max="100" step="5" value="{{ tolerance or 70 }}" oninput="document.getElementById('toleranceValue').innerText = this.value">
+                            <label for="umbral" class="form-label fw-semibold">Tolerancia Levenshtein: <span id="umbralValue" class="text-primary fw-bold">{{ (umbral_actual * 100)|int if umbral_actual else 50 }}</span>%</label>
+                            <input type="range" class="form-range" id="umbral" name="umbral" min="0.1" max="1.0" step="0.05" value="{{ umbral_actual or 0.5 }}" oninput="document.getElementById('umbralValue').innerText = Math.round(this.value * 100)">
                         </div>
                         <div class="col-12">
                             <button type="submit" class="btn btn-primary btn-lg w-100 shadow-sm">Buscar</button>
@@ -26,34 +26,36 @@
         </div>
     </div>
 </div>
-{% if query_text is not none %}
+
+{% if texto_buscado %}
 <div class="row">
     <div class="col-12">
         <div class="card shadow-sm border-0">
             <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
                 <span class="fw-bold">Coincidencias Encontradas</span>
-                <span class="badge bg-light text-dark">{{ results|length }} resultados</span>
+                <span class="badge bg-light text-dark">{{ resultados|length }} resultados</span>
             </div>
             <div class="card-body p-0">
-                {% if results %}
+                {% if resultados %}
                     <div class="list-group list-group-flush">
-                        {% for res in results %}
+                        {% for res in resultados %}
                         <div class="list-group-item p-3">
                             <div class="d-flex w-100 justify-content-between align-items-start mb-2">
-                                <h5 class="mb-1 text-primary fw-bold">{{ res.filename }}</h5>
-                                <span class="badge bg-success fs-6">Similitud: {{ res.similarity }}%</span>
+                                <h5 class="mb-1 text-primary fw-bold">Fragmento del Documento</h5>
+                                <span class="badge bg-success fs-6">Similitud: {{ res.porcentaje_similitud }}%</span>
                             </div>
                             <p class="mb-2 bg-light p-2 rounded text-muted border-start border-primary border-3 small">
-                                ...{{ res.snippet }}...
+                                ...{{ res.bloque_encontrado }}...
                             </p>
-                            <small class="text-muted">Fuente: <a href="{{ res.source_url }}" target="_blank">{{ res.source_url }}</a></small>
+                            <small class="text-muted">Fuente: <a href="{{ res.url_original }}" target="_blank">{{ res.url_original }}</a></small>
                         </div>
                         {% endfor %}
                     </div>
                 {% else %}
                     <div class="text-center text-muted py-5">
                         <i class="bi bi-exclamation-triangle display-4 text-warning mb-3"></i>
-                        <p class="fs-5">No se encontraron coincidencias con el {{ tolerance }}% de similitud.</p>
+                        <p class="fs-5">No se encontraron coincidencias con ese porcentaje de similitud.</p>
+                        <p class="small">Intenta bajar el % de tolerancia en la barra de arriba.</p>
                     </div>
                 {% endif %}
             </div>
