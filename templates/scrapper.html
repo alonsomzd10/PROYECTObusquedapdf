@@ -35,20 +35,20 @@
                                 <th>Nombre del Archivo</th>
                                 <th>Origen URL</th>
                                 <th>Tamaño de Texto</th>
-                                <th class="text-center">Método</th>
+                                <th class="text-center">Estado</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% if documents %}
                                 {% for doc in documents %}
                                 <tr>
-                                    <td class="fw-semibold text-primary">{{ doc.filename }}</td>
-                                    <td class="text-muted text-truncate" style="max-width: 200px;">{{ doc.source_url }}</td>
-                                    <td>{{ doc.text_length }} caracteres</td>
+                                    <td class="fw-semibold text-primary">{{ doc.nombre_archivo }}</td>
+                                    <td class="text-muted text-truncate" style="max-width: 200px;">
+                                        <a href="{{ doc.url_original_pdf }}" target="_blank">{{ doc.url_original_pdf }}</a>
+                                    </td>
+                                    <td>{{ doc.contenido_texto|length if doc.contenido_texto else 0 }} caracteres</td>
                                     <td class="text-center">
-                                        <span class="badge {{ 'bg-purple text-white' if doc.was_ocr else 'bg-info text-dark' }}">
-                                            {{ 'OCR Image' if doc.was_ocr else 'Native PDF' }}
-                                        </span>
+                                        <span class="badge bg-success text-white">Procesado</span>
                                     </td>
                                 </tr>
                                 {% endfor %}
